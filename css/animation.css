@@ -1,0 +1,19 @@
+@-webkit-keyframes round{
+	from{
+		transform:rotate(0deg);
+	}
+	50%{
+		transform:rotate(180deg);
+	}
+	to{
+		transform:rotate(360deg);
+	}
+}
+@-webkit-keyframes r180{
+	from{
+		transform:rotate(0deg);
+	}
+	to{
+		transform:rotate(180deg);
+	}
+}
