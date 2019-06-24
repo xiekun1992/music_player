@@ -1,6 +1,6 @@
 const ffmpeg = require('../node-addons/node-addon-ffmpeg/build/Release/ffmpeg.node')
 console.log(ffmpeg)
-let info = ffmpeg.config("D:\\Wildlife.wmv")
+let info = ffmpeg.config("H:\\rsw\\11\\生化危机5：惩戒\\生化危机5-惩罚.mkv")
 
 var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera( 45, window.innerWidth/window.innerHeight, 0.1, 1000 );
@@ -33,9 +33,11 @@ cube.rotation.z = Math.PI / 1;
 cube.rotation.y = -Math.PI / 1;
 camera.position.z = 32.7;
 
+renderer.render( scene, camera );
+
 setInterval(function() {
-    renderer.render( scene, camera );
     // var s = performance.now()
+    renderer.render( scene, camera );
     texture.image.data = new Uint8Array(ffmpeg.extractRGBFrame());
     texture.needsUpdate = true
     // console.log(performance.now() - s)
