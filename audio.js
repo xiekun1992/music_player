@@ -7,12 +7,14 @@ const ffmpeg = require('../node-addons/node-addon-ffmpeg/build/Release/ffmpeg.no
 const fs = require('fs')
 var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 var channels = 2;
-ffmpeg.initAudio()
+ffmpeg.initAudio("D:\\Wildlife.wmv")
 
 function playPcm() {
   // let buf = bufferToInt16Array(fs.readFileSync('D:\\Audio for Wildlife.raw'))
   // let buf = bufferToInt16Array(fs.readFileSync('D:\\Audio for Wildlife (2).pcm'))
-  let buf = bufferToInt16Array(ffmpeg.decodeAudio())
+  let pcmBuf = ffmpeg.decodeAudio()
+  if (!pcmBuf) return;
+  let buf = bufferToInt16Array(pcmBuf)
 
   var frameCount = buf.length;
   var myAudioBuffer = audioCtx.createBuffer(channels, frameCount / 2, 44100);
