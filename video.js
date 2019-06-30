@@ -1,6 +1,6 @@
 const ffmpeg = require('../node-addons/node-addon-ffmpeg/build/Release/ffmpeg.node')
 console.log(ffmpeg)
-let info = ffmpeg.config("H:\\rsw\\11\\生化危机5：惩戒\\生化危机5-惩罚.mkv")
+let info = ffmpeg.config("D:\\Wildlife.wmv")
 
 var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera( 45, window.innerWidth/window.innerHeight, 0.1, 1000 );

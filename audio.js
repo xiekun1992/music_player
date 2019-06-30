@@ -3,7 +3,7 @@ function bufferToInt16Array(buf) {
   return new Int16Array(int8array.buffer)
 }
 
-const ffmpeg = require('../node-addons/node-addon-ffmpeg/build/Release/ffmpeg.node')
+// const ffmpeg = require('../node-addons/node-addon-ffmpeg/build/Release/ffmpeg.node')
 const fs = require('fs')
 var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 var channels = 2;
