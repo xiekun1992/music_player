@@ -3,17 +3,19 @@ function bufferToInt16Array(buf) {
   return new Int16Array(int8array.buffer)
 }
 
-// const ffmpeg = require('../node-addons/node-addon-ffmpeg/build/Release/ffmpeg.node')
-const fs = require('fs')
+// const fs = require('fs')
 var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 var channels = 2;
-ffmpeg.initAudio("D:\\Wildlife.wmv")
+ffmpeg.initAudio(filename)
 
 function playPcm() {
-  // let buf = bufferToInt16Array(fs.readFileSync('D:\\Audio for Wildlife.raw'))
-  // let buf = bufferToInt16Array(fs.readFileSync('D:\\Audio for Wildlife (2).pcm'))
   let pcmBuf = ffmpeg.decodeAudio()
-  if (!pcmBuf) return;
+  if (!pcmBuf){
+    return;
+  } else if (pcmBuf.length == 0) {
+    playPcm();
+    return;
+  }
   let buf = bufferToInt16Array(pcmBuf)
 
   var frameCount = buf.length;
@@ -51,12 +53,8 @@ function playPcm() {
     console.log('Your audio has finished playing');
     playPcm()
   }
-  // set the buffer in the AudioBufferSourceNode
   source.buffer = myAudioBuffer;
-  // connect the AudioBufferSourceNode to the
-  // destination so we can hear the sound
   source.connect(audioCtx.destination);
-  // start the source playing
   source.start();
 }
 playPcm()
