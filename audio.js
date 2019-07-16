@@ -3,12 +3,12 @@ function bufferToInt16Array(buf) {
   return new Int16Array(int8array.buffer)
 }
 
-// const ffmpeg = require('../node-addons/node-addon-ffmpeg/build/Release/ffmpeg.node')
-const fs = require('fs')
+// const fs = require('fs')
 var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 var channels = 2;
 // ffmpeg.initAudio("C:\\Users\\Public\\Music\\Sample Music\\Sleep Away.mp3")
-ffmpeg.initAudio("D:\\Wildlife.wmv")
+// ffmpeg.initAudio("D:\\Wildlife.wmv")
+ffmpeg.initAudio(filename)
 
 function playPcm() {
   let frameCount = 0
@@ -76,12 +76,8 @@ function playPcm() {
     console.log('Your audio has finished playing');
     playPcm()
   }
-  // set the buffer in the AudioBufferSourceNode
   source.buffer = myAudioBuffer;
-  // connect the AudioBufferSourceNode to the
-  // destination so we can hear the sound
   source.connect(audioCtx.destination);
-  // start the source playing
   source.start();
 }
 playPcm()
