@@ -22,6 +22,8 @@ worker.onmessage = function(event) {
   if (event.data.code == 3) {
     if (event.data.audioBufferLeft.length <= 0 && event.data.audioBufferRight.length <= 0) {
       clearInterval(timer)
+      source.stop()
+      source.disconnect()
     }
     for (let i = 0; i < event.data.audioBufferLeft.length; i++) {
       let d = event.data.audioBufferLeft[i]
@@ -37,12 +39,6 @@ worker.onmessage = function(event) {
     source.stop()
     source.disconnect()
   }
-  // console.log(left, right)
-  // nowBuffering1.set(left, event.data.bufferIndex)
-  // nowBuffering2.set(right, event.data.bufferIndex)
-  // if (event.data.status == 1) {
-  //   fillBuffer(event.data.left, event.data.right)
-  // }
 }
 worker.postMessage({
   code: 2,
@@ -68,26 +64,3 @@ timer = setInterval(() => {
     prevSecond = second
   }
 }, 10)
-
-// function fillBuffer(left, right) {
-//   // let len = 0
-//   // for (let i = 0; i < left.length; i++) {
-//   //   for (let j = 0; j < left[i].length; j++) {
-//   //     var word1 = left[i][j]
-//   //     nowBuffering1[len] = ((word1 + 32768) % 65536 - 32768) / 32768.0;  
-//   //     len++
-//   //   } 
-//   // }
-//   // len = 0
-//   // for (let i = 0; i < right.length; i++) {
-//   //   for (let j = 0; j < right[i].length; j++) {
-//   //     var word1 = right[i][j]
-//   //     nowBuffering2[len] = ((word1 + 32768) % 65536 - 32768) / 32768.0;  
-//   //     len++
-//   //   } 
-//   // }
-  
-//   // setInterval(() => {
-//   //   console.log(audioCtx.getOutputTimestamp())
-//   // }, 10)
-// }

@@ -13,10 +13,12 @@
     We are using node <script>document.write(process.versions.node)</script>,
     Chrome <script>document.write(process.versions.chrome)</script>,
     and Electron <script>document.write(process.versions.electron)</script>. -->
-    <webview src="./audio.html" nodeintegration style="width: 0; height: 0;"></webview>
+    <!-- <webview src="./audio.html" nodeintegration enableblinkfeatures="ModuleDedicatedWorker, SharedWorker, ModuleServiceWorker"></webview> -->
     <script>
       var filename = 'D:\\转译文件\\Something Just Like This-The Chainsmokers & Coldplay.mp3'  
       var filename = 'C:\\Users\\Public\\Music\\Sample Music\\Sleep Away.mp3'  
+      var filename = 'C:\\Users\\Public\\Music\\Sample Music\\Maid with the Flaxen Hair.mp3'  
+      var filename = 'C:\\Users\\Public\\Music\\Sample Music\\Kalimba.mp3'  
       // var filename = 'D:\\Wildlife.wmv'  
     const ffmpeg = require('../node-addons/node-addon-ffmpeg/build/Release/ffmpeg.node')
     ffmpeg.initAudio(filename)
