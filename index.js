@@ -7,14 +7,17 @@ let win
 function createWindow () {
   // 创建浏览器窗口。
   win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1280,
+    height: 720,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      nodeIntegrationInWorker: true,
+      webviewTag: true
     }
   })
 
   // 加载index.html文件
+  // win.loadFile('audio.html')
   win.loadFile('index.html')
 
   // 打开开发者工具
