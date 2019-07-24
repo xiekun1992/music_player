@@ -19,12 +19,16 @@
       var filename = 'C:\\Users\\Public\\Music\\Sample Music\\Sleep Away.mp3'  
       var filename = 'C:\\Users\\Public\\Music\\Sample Music\\Maid with the Flaxen Hair.mp3'  
       var filename = 'C:\\Users\\Public\\Music\\Sample Music\\Kalimba.mp3'  
-      // var filename = 'D:\\Wildlife.wmv'  
-    const ffmpeg = require('../node-addons/node-addon-ffmpeg/build/Release/ffmpeg.node')
-    ffmpeg.initAudio(filename)
+      var filename = 'C:\\Users\\Public\\Music\\Sample Music\\The-Chainsmokers-Coldplay-Something-Just-Like-This-Lyric.mp3'  
+      var filename = 'D:\\Wildlife.wmv'  
+      const ffmpeg = require('../node-addons/node-addon-ffmpeg/build/Release/ffmpeg.node')
+      ffmpeg.init(filename)
+      let info = ffmpeg.getInfo()
+      ffmpeg.readPacket();
+      // console.log(ffmpeg.decodeAudio())
     </script>
     <script src="three.js"></script>
-    <script src="video.js"></script>
+    <!-- <script src="video.js"></script> -->
     <script src="audio.js"></script>
   </body>
 </html>

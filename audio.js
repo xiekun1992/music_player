@@ -1,8 +1,8 @@
 let worker = new Worker('./audio-worker.js')
 
 let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-let channels = 2;
-let sampleRate = 44100
+let channels = +info.audio.channels
+let sampleRate = +info.audio.sampleRate
 let length = 5 * sampleRate // 左右声道各5秒音频缓冲
 let myAudioBuffer = audioCtx.createBuffer(channels, length, sampleRate);
 let nowBuffering1 = myAudioBuffer.getChannelData(0, 16, sampleRate);
@@ -53,8 +53,11 @@ worker.postMessage({
 })
 let prevSecond = 0;
 timer = setInterval(() => {
-  let second = Math.floor(audioCtx.getOutputTimestamp().contextTime)
+  let contextTime = audioCtx.getOutputTimestamp().contextTime
+  let second = Math.floor(contextTime)
   // ...... 设置音频时钟
+  // console.log(audioCtx.getOutputTimestamp())
+  ffmpeg.updateAudioClock(contextTime)
   // 根据时间差替换音频缓冲区内的数据
   if (second - prevSecond > 2) {
     worker.postMessage({
