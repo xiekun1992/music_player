@@ -25,11 +25,17 @@
       var filename = 'D:\\testvideo\\月球.mp4'  
       var filename = 'H:\\rsw\\11\\终结者5：创世纪\\终结者5：创世纪.mkv'  
       var filename = 'H:\\rsw\\11\\猩球崛起3：终极之战\\猩球崛起3：终极之战.mkv'  
+      
       const ffmpeg = require('../node-addons/node-addon-ffmpeg/build/Release/ffmpeg.node')
       ffmpeg.init(filename)
       let info = ffmpeg.getInfo()
       ffmpeg.readPacket(function(){});
       // console.log(ffmpeg.decodeAudio())
+      const t = setTimeout(() => {
+        playVideo()
+        // playAudio()
+        clearTimeout(t)
+      }, 1000);
     </script>
     <script src="three.js"></script>
     <script src="video.js"></script>
