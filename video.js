@@ -1,5 +1,5 @@
 // console.log(ffmpeg)
-let info = ffmpeg.config(filename)
+// let info = ffmpeg.config(filename)
 
 var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera( 45, window.innerWidth/window.innerHeight, 0.1, 1000 );
@@ -18,8 +18,8 @@ function onWindowResize(){
 
 }
         
-var width = info.width, height = info.height, interval = 1000 / info.fps;
-var data = ffmpeg.extractRGBFrame()
+var width = +info.video.width, height = +info.video.height, interval = Math.ceil(1000 / +info.video.fps);
+var data = ffmpeg.decodeVideo()
 data = new Uint8Array(data)
 
 var texture = new THREE.DataTexture( data, width, height, THREE.RGBFormat );
@@ -34,10 +34,23 @@ camera.position.z = 32.7;
 
 renderer.render( scene, camera );
 
-setInterval(function() {
+// function render() {
+//     renderer.render( scene, camera );
+//     texture.image.data = new Uint8Array(ffmpeg.decodeVideo());
+//     texture.needsUpdate = true
+//     requestAnimationFrame(render)
+// }
+// render()
+
+let timer = setInterval(function() {
     // var s = performance.now()
     renderer.render( scene, camera );
-    texture.image.data = new Uint8Array(ffmpeg.extractRGBFrame());
-    texture.needsUpdate = true
+    let tmp = ffmpeg.decodeVideo()
+    if (tmp) {
+        texture.image.data = new Uint8Array(tmp);
+        texture.needsUpdate = true
+    } else {
+        clearInterval(timer)
+    }
     // console.log(performance.now() - s)
 }, interval);

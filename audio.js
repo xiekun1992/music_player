@@ -57,7 +57,7 @@ timer = setInterval(() => {
   let second = Math.floor(contextTime)
   // ...... 设置音频时钟
   // console.log(audioCtx.getOutputTimestamp())
-  ffmpeg.updateAudioClock(contextTime)
+  // ffmpeg.updateAudioClock(contextTime)
   // 根据时间差替换音频缓冲区内的数据
   if (second - prevSecond > 2) {
     worker.postMessage({
