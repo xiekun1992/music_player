@@ -2,7 +2,7 @@ const { app, BrowserWindow } = require('electron')
 
 // 保持对window对象的全局引用，如果不这么做的话，当JavaScript对象被
 // 垃圾回收的时候，window对象将会自动的关闭
-let win
+let win, child
 
 function createWindow () {
   // 创建浏览器窗口。
@@ -15,7 +15,9 @@ function createWindow () {
       webviewTag: true
     }
   })
-
+  // child = new BrowserWindow({parent: win, autoHideMenuBar: true});
+  // child.setAlwaysOnTop(true);
+  // child.show();
   // 加载index.html文件
   // win.loadFile('audio.html')
   win.loadFile('index.html')

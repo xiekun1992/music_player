@@ -42,7 +42,7 @@ renderer.render( scene, camera );
 // }
 // render()
 
-let timer = setInterval(function() {
+let vtimer = setInterval(function() {
     // var s = performance.now()
     renderer.render( scene, camera );
     let tmp = ffmpeg.decodeVideo()
@@ -50,7 +50,7 @@ let timer = setInterval(function() {
         texture.image.data = new Uint8Array(tmp);
         texture.needsUpdate = true
     } else {
-        clearInterval(timer)
+        clearInterval(vtimer)
     }
     // console.log(performance.now() - s)
 }, interval);

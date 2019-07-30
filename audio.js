@@ -66,4 +66,4 @@ timer = setInterval(() => {
     })
     prevSecond = second
   }
-}, 10)
+}, 20)
