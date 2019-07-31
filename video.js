@@ -37,7 +37,9 @@ function playVideo() {
         let flag = Date.now()
         // let vtimer
         function render() {
-            if (Date.now() - flag >= interval) {
+            let flagEnd = Date.now()
+            if (flagEnd - flag >= interval) {
+                flag = flagEnd
                 renderer.render( scene, camera );
                 data = ffmpeg.decodeVideo()
                 if (data) {
