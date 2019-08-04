@@ -34,38 +34,38 @@ function playVideo() {
         
         renderer.render( scene, camera );
         
-        let flag = Date.now()
-        // let vtimer
-        function render() {
-            let flagEnd = Date.now()
-            if (flagEnd - flag >= interval) {
-                flag = flagEnd
-                renderer.render( scene, camera );
-                data = ffmpeg.decodeVideo()
-                if (data) {
-                    texture.image.data = new Uint8Array(data);
-                    texture.needsUpdate = true
-                } else {
-                    // cancelAnimationFrame
-                }
-            }
-            requestAnimationFrame(render)
-        }
-        render()
-        
-        // let vtimer = setInterval(function() {
-        //     // ffmpeg.decodeVideo()
-        //     // var s = performance.now()
-        //     renderer.render( scene, camera );
-        //     data = ffmpeg.decodeVideo()
-        //     if (data) {
-        //         texture.image.data = new Uint8Array(data);
-        //         texture.needsUpdate = true
-        //     } else {
-        //         clearInterval(vtimer)
+        // let flag = Date.now()
+        // // let vtimer
+        // function render() {
+        //     let flagEnd = Date.now()
+        //     if (flagEnd - flag >= interval) {
+        //         flag = flagEnd
+        //         renderer.render( scene, camera );
+        //         data = ffmpeg.decodeVideo()
+        //         if (data) {
+        //             texture.image.data = new Uint8Array(data);
+        //             texture.needsUpdate = true
+        //         } else {
+        //             // cancelAnimationFrame
+        //         }
         //     }
-        //     // console.log(performance.now() - s)
-        // }, interval);
+        //     requestAnimationFrame(render)
+        // }
+        // render()
+        
+        let vtimer = setInterval(function() {
+            // ffmpeg.decodeVideo()
+            // var s = performance.now()
+            renderer.render( scene, camera );
+            data = ffmpeg.decodeVideo()
+            if (data) {
+                texture.image.data = new Uint8Array(data);
+                texture.needsUpdate = true
+            } else {
+                clearInterval(vtimer)
+            }
+            // console.log(performance.now() - s)
+        }, interval);
     }
 
 }    

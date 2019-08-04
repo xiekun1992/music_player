@@ -11,21 +11,19 @@ function playAudio() {
     let nowBuffering2 = myAudioBuffer.getChannelData(1, 16, sampleRate);
     let timer
     let source = audioCtx.createBufferSource();
-    source.onended = function() {
-      console.log('Your audio has finished playing');
-    }
     source.buffer = myAudioBuffer;
     source.loop = true
     source.connect(audioCtx.destination);
     source.start(0);
 
     worker.onmessage = function(event) {
-      console.log(event.data)
+      // console.log(event.data)
       if (event.data.code == 3) {
         if (event.data.audioBufferLeft.length <= 0 && event.data.audioBufferRight.length <= 0) {
           clearInterval(timer)
           source.stop()
           source.disconnect()
+          worker.terminate()
         }
         for (let i = 0; i < event.data.audioBufferLeft.length; i++) {
           let d = event.data.audioBufferLeft[i]
@@ -40,34 +38,40 @@ function playAudio() {
         clearInterval(timer)
         source.stop()
         source.disconnect()
+        worker.terminate()
       }
     }
-    worker.postMessage({
-      code: 2,
-      bufferLength: length,
-      audioBufferLeft: nowBuffering1,
-      audioBufferRight: nowBuffering2
-    })
+    timer = setTimeout(() => {
+      clearTimeout(timer)
+      worker.postMessage({
+        code: 2,
+        bufferLength: length
+      })
+      timer = setInterval(check, 20)
+    }, 1000)
 
-    worker.postMessage({
-      code: 1,
-      dataNeed: length
-    })
+    // worker.postMessage({
+    //   code: 1,
+    //   dataNeed: length
+    // })
     let prevSecond = 0;
-    timer = setInterval(() => {
-      let contextTime = audioCtx.getOutputTimestamp().contextTime
-      let second = Math.floor(contextTime)
-      // ...... 设置音频时钟
-      // console.log(audioCtx.getOutputTimestamp())
-      // ffmpeg.updateAudioClock(contextTime)
-      // 根据时间差替换音频缓冲区内的数据
-      if (second - prevSecond > 2) {
-        worker.postMessage({
-          code: 1,
-          dataNeed: Math.abs(second - prevSecond) * sampleRate
-        })
-        prevSecond = second
-      }
-    }, 20)
+    let contextTime
+    let second
+    let flagEnd
+    function check() {
+        contextTime = audioCtx.getOutputTimestamp().contextTime
+        second = Math.floor(contextTime)
+        // ...... 设置音频时钟
+        // console.log(audioCtx.getOutputTimestamp())
+        // ffmpeg.updateAudioClock(contextTime)
+        // 根据时间差替换音频缓冲区内的数据
+        if (second - prevSecond > 2) {
+          worker.postMessage({
+            code: 1,
+            dataNeed: Math.abs(second - prevSecond) * sampleRate
+          })
+          prevSecond = second
+        }
+    }
   }
 }

@@ -3,48 +3,41 @@ const ffmpeg = require('../node-addons/node-addon-ffmpeg/build/Release/ffmpeg.no
 // ffmpeg.initAudio(filename)
 
 let bufferLength
-let audioBufferLeft
-let audioBufferRight
 let bufferIndex = 0
 
 let leftBuffer = new Int16Array(), rightBuffer = new Int16Array()
 let bufferLimit = 256 * 1024
 
-let initialized = fillBuffer()
-
+fillBuffer()
 onmessage = function(event) {
   if (event.data.code == 1) {
-    initialized.then(() => {
-      audioBufferLeft = new Int16Array(event.data.dataNeed)
-      audioBufferRight = new Int16Array(event.data.dataNeed)
-      if (leftBuffer.length <= 0 && rightBuffer.length <= 0) {
-        this.postMessage({
-          code: 4
-        })  
-        return;
-      }
-      for (var i = 0; i < event.data.dataNeed; i++) {
-        audioBufferLeft[i] = leftBuffer[i]
-        audioBufferRight[i] = rightBuffer[i]
-      }
+    // return;
+    let audioBufferLeft = new Int16Array(event.data.dataNeed)
+    let audioBufferRight = new Int16Array(event.data.dataNeed)
+    if (leftBuffer.length <= 0 && rightBuffer.length <= 0) {
       this.postMessage({
-        code: 3,
-        bufferIndex,
-        audioBufferLeft,
-        audioBufferRight
-      })
-      bufferIndex = (bufferIndex + i) % bufferLength
-      leftBuffer = leftBuffer.subarray(i)
-      rightBuffer = rightBuffer.subarray(i)
-      // 补充缓冲区
-      fillBuffer()
+        code: 4
+      })  
+      return;
+    }
+    let i
+    for (i = 0; i < event.data.dataNeed; i++) {
+      audioBufferLeft[i] = leftBuffer[i]
+      audioBufferRight[i] = rightBuffer[i]
+    }
+    this.postMessage({
+      code: 3,
+      bufferIndex,
+      audioBufferLeft,
+      audioBufferRight
     })
+    bufferIndex = (bufferIndex + i) % bufferLength
+    leftBuffer = leftBuffer.subarray(i)
+    rightBuffer = rightBuffer.subarray(i)
+    // 补充缓冲区
+    fillBuffer()
   } else if (event.data.code == 2) {
     bufferLength = event.data.bufferLength
-    // audioBufferLeft = new Int16Array(bufferLength)
-    // audioBufferRight = new Int16Array(bufferLength)
-    // audioBufferLeft = event.data.audioBufferLeft
-    // audioBufferRight = event.data.audioBufferRight
   }
 }
 // 初始化
@@ -58,6 +51,7 @@ async function fillBuffer() {
       }
       let buf = bufferToInt16Array(pcmBuf)
       savePcmBuffer(buf)
+      buf = pcmBuf = null
     }
     if (leftBuffer.length >= bufferLimit && rightBuffer.length >= bufferLimit) {
       break;
@@ -86,6 +80,8 @@ function savePcmBuffer(buf) {
   rightTmp.set(rightBuffer)
   rightTmp.set(buf2, rightBuffer.length)
   rightBuffer = rightTmp
+
+  rightTmp = leftTmp = buf1 = buf2 = null
 }
 
 function bufferToInt16Array(buf) {

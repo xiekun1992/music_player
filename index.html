@@ -25,16 +25,25 @@
       var filename = 'D:\\testvideo\\月球.mp4'  
       var filename = 'H:\\rsw\\11\\终结者5：创世纪\\终结者5：创世纪.mkv'  
       var filename = 'H:\\rsw\\11\\猩球崛起3：终极之战\\猩球崛起3：终极之战.mkv'  
-      
+
+      var filename = 'C:\\Users\\Public\\Music\\Sample Music\\Sleep Away.mp3'  
+      // var filename = 'E:\\迅雷下载\\复仇者联盟4：终局之战.Avengers.Endgame.2019.HC1080P.X264.AAC.English.CHS.mp4'
+      var filename = 'D:\\Wildlife.wmv'  
+      var filename = 'E:\\迅雷下载\\1024@Blacked - Sybil - VIP性交治疗 (黑白配,美乳)\\Blacked - Sybil - VIP性交治疗 (黑白配,美乳).mp4'
+      var filename = 'C:\\Users\\Public\\Music\\Sample Music\\Kalimba.mp3'  
+      var filename = 'E:\\迅雷下载\\SSNI-452 下着モデルをさせられて… 三上悠亜 フェチズム9ランジェリーSpecial\\SSNI452.mp4'  
+      var filename = 'E:\\迅雷下载\\复仇者联盟3：无限战争.720p.BD国语中英双字[最新电影www.66ys.tv].mp4'
+      var filename = 'C:\\Users\\Public\\Music\\Sample Music\\Maid with the Flaxen Hair.mp3'  
+      var filename = 'D:\\转译文件\\Wonderful Love (DJ Raf Remix)-Money Penny.mp3'  
       const ffmpeg = require('../node-addons/node-addon-ffmpeg/build/Release/ffmpeg.node')
       ffmpeg.init(filename)
       let info = ffmpeg.getInfo()
       ffmpeg.readPacket(function(){});
       // console.log(ffmpeg.decodeAudio())
       const t = setTimeout(() => {
-        playVideo()
-        // playAudio()
         clearTimeout(t)
+        playVideo()
+        playAudio()
       }, 1000);
     </script>
     <script src="three.js"></script>
