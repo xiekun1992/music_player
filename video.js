@@ -1,4 +1,4 @@
-function playVideo() {
+// function playVideo() {
     
     if (info.video) {
         var scene = new THREE.Scene();
@@ -19,8 +19,8 @@ function playVideo() {
         }
                 
         var width = +info.video.width, height = +info.video.height, interval = Math.ceil(1000 / +info.video.fps);
-        var data = ffmpeg.decodeVideo()
-        data = new Uint8Array(data)
+        // var data = ffmpeg.decodeVideo()
+        var data = new Uint8Array(width * height * 3)
         
         var texture = new THREE.DataTexture( data, width, height, THREE.RGBFormat );
         var geometry = new THREE.PlaneGeometry( 48, 27, 1, 1 )
@@ -53,19 +53,19 @@ function playVideo() {
         // }
         // render()
         
-        let vtimer = setInterval(function() {
-            // ffmpeg.decodeVideo()
-            // var s = performance.now()
-            renderer.render( scene, camera );
-            data = ffmpeg.decodeVideo()
-            if (data) {
-                texture.image.data = new Uint8Array(data);
-                texture.needsUpdate = true
-            } else {
-                clearInterval(vtimer)
-            }
-            // console.log(performance.now() - s)
-        }, interval);
+        // let vtimer = setInterval(function() {
+        //     // ffmpeg.decodeVideo()
+        //     // var s = performance.now()
+        //     renderer.render( scene, camera );
+        //     data = ffmpeg.decodeVideo()
+        //     if (data) {
+        //         texture.image.data = new Uint8Array(data);
+        //         texture.needsUpdate = true
+        //     } else {
+        //         clearInterval(vtimer)
+        //     }
+        //     // console.log(performance.now() - s)
+        // }, interval);
     }
 
-}    
+// }    

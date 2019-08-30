@@ -1,7 +1,7 @@
+// debugger
 const ffmpeg = require('../node-addons/node-addon-ffmpeg/build/Release/ffmpeg.node')
 // var filename = 'D:\\Wildlife.wmv'  
 // ffmpeg.initAudio(filename)
-
 let bufferLength
 let bufferIndex = 0
 

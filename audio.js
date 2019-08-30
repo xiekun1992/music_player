@@ -47,7 +47,7 @@ function playAudio() {
         code: 2,
         bufferLength: length
       })
-      timer = setInterval(check, 20)
+      timer = setInterval(check, 10)
     }, 1000)
 
     // worker.postMessage({
@@ -63,7 +63,8 @@ function playAudio() {
         second = Math.floor(contextTime)
         // ...... 设置音频时钟
         // console.log(audioCtx.getOutputTimestamp())
-        // ffmpeg.updateAudioClock(contextTime)
+        console.log(contextTime)
+        ffmpeg.updateAudioClock(contextTime * 1000)
         // 根据时间差替换音频缓冲区内的数据
         if (second - prevSecond > 2) {
           worker.postMessage({
