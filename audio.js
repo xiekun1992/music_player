@@ -11,6 +11,7 @@ function playAudio() {
     let nowBuffering2 = myAudioBuffer.getChannelData(1, 16, sampleRate);
     let timer
     let source = audioCtx.createBufferSource();
+    let timeStart = 0
     source.buffer = myAudioBuffer;
     source.loop = true
     source.connect(audioCtx.destination);
@@ -47,6 +48,7 @@ function playAudio() {
         code: 2,
         bufferLength: length
       })
+      timeStart = audioCtx.getOutputTimestamp().performanceTime 
       timer = setInterval(check, 10)
     }, 1000)
 
@@ -59,12 +61,15 @@ function playAudio() {
     let second
     let flagEnd
     function check() {
+      
+      // console.log(audioCtx.getOutputTimestamp())
         contextTime = audioCtx.getOutputTimestamp().contextTime
         second = Math.floor(contextTime)
         // ...... 设置音频时钟
-        // console.log(audioCtx.getOutputTimestamp())
-        console.log(contextTime)
-        ffmpeg.updateAudioClock(contextTime * 1000)
+        // console.log(contextTime)
+        // const interval = Math.floor(1 / (2 * info.video.fps) * (audioCtx.getOutputTimestamp().performanceTime - timeStart))
+        // console.log(interval)
+        ffmpeg.updateAudioClock(audioCtx.getOutputTimestamp().performanceTime - timeStart)
         // 根据时间差替换音频缓冲区内的数据
         if (second - prevSecond > 2) {
           worker.postMessage({
