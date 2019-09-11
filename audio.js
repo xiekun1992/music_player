@@ -29,8 +29,8 @@ function playAudio() {
         // ...... 设置音频时钟
         // console.log(contextTime)
         // const interval = Math.floor(1 / (2 * info.video.fps) * (audioCtx.getOutputTimestamp().performanceTime - timeStart))
-        let interval = Math.floor(1 / 2 * (audioCtx.getOutputTimestamp().performanceTime - timeStart))
-        console.log(contextTime, interval)
+        let interval = Math.floor((audioCtx.getOutputTimestamp().performanceTime - timeStart))
+        // console.log(contextTime, interval)
         ffmpeg.updateAudioClock(interval)
         // 根据时间差替换音频缓冲区内的数据
         if (second - prevSecond > 2) {
