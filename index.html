@@ -20,72 +20,62 @@
     <!-- <script src="video.js"></script> -->
     <script src="audio.js"></script>
     <script>
-      var filename = 'D:\\转译文件\\Something Just Like This-The Chainsmokers & Coldplay.mp3'  
-      var filename = 'C:\\Users\\Public\\Music\\Sample Music\\Sleep Away.mp3'  
-      var filename = 'C:\\Users\\Public\\Music\\Sample Music\\Maid with the Flaxen Hair.mp3'  
-      var filename = 'C:\\Users\\Public\\Music\\Sample Music\\Kalimba.mp3'  
-      var filename = 'C:\\Users\\Public\\Music\\Sample Music\\The-Chainsmokers-Coldplay-Something-Just-Like-This-Lyric.mp3'  
-      var filename = 'D:\\testvideo\\MP044电动机.mp4'  
-      var filename = 'D:\\testvideo\\月球.mp4'  
-      var filename = 'H:\\rsw\\11\\终结者5：创世纪\\终结者5：创世纪.mkv'  
-      var filename = 'H:\\rsw\\11\\猩球崛起3：终极之战\\猩球崛起3：终极之战.mkv'  
-      var filename = 'D:\\Wildlife.wmv'  
-      var filename = 'J:\\Nwt\\林皇恺\\印度达人秀.flv'  
       const ffmpeg = require('../node-addons/node-addon-ffmpeg/build/Release/ffmpeg.node')
-      ffmpeg.init(filename)
-      let info = ffmpeg.getInfo()
-      // console.log(ffmpeg.decodeAudio())
-      if (info.video) {
-        var scene = new THREE.Scene();
-        var camera = new THREE.PerspectiveCamera( 45, window.innerWidth/window.innerHeight, 0.1, 1000 );
-        
-        var renderer = new THREE.WebGLRenderer();
-        renderer.setSize( window.innerWidth, window.innerHeight );
-        document.body.appendChild( renderer.domElement );
-        window.addEventListener( 'resize', onWindowResize, false );
-        
-        function onWindowResize(){
-        
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-        
+      let info, videoInitialized = false
+      require('electron').ipcRenderer.on('play', function(event, filename) {
+        console.log(filename);  // Prints "whoooooooh!"
+        ffmpeg.init(filename)
+        info = ffmpeg.getInfo()
+        if (!videoInitialized) {
+          videoInitialized = true
+          if (info.video) {
+            var scene = new THREE.Scene();
+            var camera = new THREE.PerspectiveCamera( 45, window.innerWidth/window.innerHeight, 0.1, 1000 );
+            
+            var renderer = new THREE.WebGLRenderer();
             renderer.setSize( window.innerWidth, window.innerHeight );
-        
+            document.body.appendChild( renderer.domElement );
+            window.addEventListener( 'resize', onWindowResize, false );
+            
+            function onWindowResize(){
+            
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+            
+                renderer.setSize( window.innerWidth, window.innerHeight );
+            
+            }
+                    
+            var width = +info.video.width, height = +info.video.height, interval = Math.ceil(1000 / +info.video.fps);
+            // var data = ffmpeg.decodeVideo()
+            var data = new Uint8Array(width * height * 3)
+            
+            var texture = new THREE.DataTexture( data, width, height, THREE.RGBFormat );
+            var geometry = new THREE.PlaneGeometry( 48, 27, 1, 1 )
+            // var material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
+            var material = new THREE.MeshBasicMaterial( { map: texture, side: THREE.DoubleSide, color: 0xffffff } );
+            var cube = new THREE.Mesh( geometry, material );
+            scene.add( cube );
+            cube.rotation.z = Math.PI / 1;
+            cube.rotation.y = -Math.PI / 1;
+            camera.position.z = 32.7;
+            
+            renderer.render( scene, camera );
+          }
         }
-                
-        var width = +info.video.width, height = +info.video.height, interval = Math.ceil(1000 / +info.video.fps);
-        // var data = ffmpeg.decodeVideo()
-        var data = new Uint8Array(width * height * 3)
-        
-        var texture = new THREE.DataTexture( data, width, height, THREE.RGBFormat );
-        var geometry = new THREE.PlaneGeometry( 48, 27, 1, 1 )
-        // var material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
-        var material = new THREE.MeshBasicMaterial( { map: texture, side: THREE.DoubleSide, color: 0xffffff } );
-        var cube = new THREE.Mesh( geometry, material );
-        scene.add( cube );
-        cube.rotation.z = Math.PI / 1;
-        cube.rotation.y = -Math.PI / 1;
-        camera.position.z = 32.7;
-        
-        renderer.render( scene, camera );
-      }
-      ffmpeg.readPacket(function(){});
-      ffmpeg.update(() => {
-        console.log('update audio')
-        // debugger
-        playAudio()
-      }, videoData => {
-        console.log('videoData', videoData)
-        if (videoData) {
-          texture.image.data = new Uint8Array(videoData);
-          texture.needsUpdate = true;
-        }
-        renderer.render( scene, camera );
+        ffmpeg.readPacket(function(){});
+        ffmpeg.update(() => {
+          console.log('update audio')
+          playAudio()
+        }, videoData => {
+          // console.log('videoData', videoData)
+          if (videoData) {
+            texture.image.data = new Uint8Array(videoData);
+            texture.needsUpdate = true;
+          }
+          renderer.render( scene, camera );
+        });
       });
-      // const t = setTimeout(() => {
-      //   clearTimeout(t)
-      //   playVideo()
-      // }, 1000);
     </script>
   </body>
 </html>

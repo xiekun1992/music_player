@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, globalShortcut, dialog } = require('electron')
 
 // 保持对window对象的全局引用，如果不这么做的话，当JavaScript对象被
 // 垃圾回收的时候，window对象将会自动的关闭
@@ -37,7 +37,10 @@ function createWindow () {
 // Electron 会在初始化后并准备
 // 创建浏览器窗口时，调用这个函数。
 // 部分 API 在 ready 事件触发后才能使用。
-app.on('ready', createWindow)
+app.on('ready', () => {
+  registerGlobalShortcut()
+  createWindow()
+})
 
 // 当全部窗口关闭时退出。
 app.on('window-all-closed', () => {
@@ -55,3 +58,23 @@ app.on('activate', () => {
     createWindow()
   }
 })
+app.on('will-quit', () => {
+  globalShortcut.unregisterAll()
+})
+
+function registerGlobalShortcut() {
+  const ret = globalShortcut.register('CommandOrControl+N', () => {
+    dialog.showOpenDialog({
+      title: '选择视频',
+      properties: ['openFile']
+    }, (filePaths) => {
+      if (filePaths) {
+        win.webContents.send('play', filePaths[0])
+      }
+      console.log(filePaths)
+    })
+  });
+  if (!ret) {
+    console.log('register ctrl+N fail')
+  }
+}
