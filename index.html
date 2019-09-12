@@ -47,11 +47,14 @@
             }
                     
             var width = +info.video.width, height = +info.video.height, interval = Math.ceil(1000 / +info.video.fps);
+            var ratio = width / height
             // var data = ffmpeg.decodeVideo()
             var data = new Uint8Array(width * height * 3)
             
             var texture = new THREE.DataTexture( data, width, height, THREE.RGBFormat );
-            var geometry = new THREE.PlaneGeometry( 48, 27, 1, 1 )
+            
+            var geometry = new THREE.PlaneGeometry( 27 * ratio, 27, 1, 1 )
+            // var geometry = new THREE.PlaneGeometry( 48, 27, 1, 1 )
             // var material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
             var material = new THREE.MeshBasicMaterial( { map: texture, side: THREE.DoubleSide, color: 0xffffff } );
             var cube = new THREE.Mesh( geometry, material );
