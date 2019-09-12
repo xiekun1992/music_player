@@ -9,6 +9,9 @@
     </style>
   </head>
   <body>
+    <div id="playerContainer">
+
+    </div>
     <!-- <h1>Hello World!</h1>
     We are using node <script>document.write(process.versions.node)</script>,
     Chrome <script>document.write(process.versions.chrome)</script>,
@@ -34,7 +37,7 @@
             
             var renderer = new THREE.WebGLRenderer();
             renderer.setSize( window.innerWidth, window.innerHeight );
-            document.body.appendChild( renderer.domElement );
+            document.querySelector('#playerContainer').appendChild( renderer.domElement );
             window.addEventListener( 'resize', onWindowResize, false );
             
             function onWindowResize(){
