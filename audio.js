@@ -32,6 +32,7 @@ function playAudio() {
         let interval = Math.floor((audioCtx.getOutputTimestamp().performanceTime - timeStart))
         // console.log(contextTime, interval)
         ffmpeg.updateAudioClock(interval)
+        progressEl.style.width = contextTime * 1000 / info.video.duration * 100 + '%'
         // 根据时间差替换音频缓冲区内的数据
         if (second - prevSecond > 2) {
           worker.postMessage({

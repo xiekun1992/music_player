@@ -2,15 +2,80 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Hello World!</title>
+    <title>Player</title>
     <style>
     body { margin: 0; }
     canvas { width: 100%; height: 100%; float: left; }
+    .player {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: #000;
+    }
+    .player:hover .player-control {
+      opacity: 1;
+    }
+    .player .player-control{
+      position: absolute;
+      width: 100%;
+      height: 70px;
+      /* background: #00000085; */
+      left: 0;
+      bottom: 0;
+      opacity: 0;
+      z-index: 99999999;
+      transition: opacity 0.5s;
+    }
+    .player .player-control .control {
+      text-align: center;
+      margin-top: 5px;
+    }
+    .player .player-control .control>.play {
+      height: 40px;
+      width: 40px;
+      border-radius: 50%;
+      background: #fff;
+      margin: 8px 10px;
+      display: inline-block;
+    }
+    .player .player-control .control>.prev,
+    .player .player-control .control>.next {
+      height: 34px;
+      width: 34px;
+      border-radius: 50%;
+      background: #fff;
+      margin: 11px 0;
+      display: inline-block;
+    }
+    .player .player-control .progress {
+      height: 5px;
+      background: #8684848a;
+      position: relative;
+      width: 96%;
+      transform: translateX(2%);
+    }
+    .player .player-control .progress>.progress-track{
+      position: absolute;
+      width: 0%;
+      height: 100%;
+      background: #2196F3;
+    }
+    
     </style>
   </head>
   <body>
-    <div id="playerContainer">
-
+    <div class="player">
+      <div id="playerContainer"></div>
+      <div class="player-control">
+        <div class="progress">
+          <div class="progress-track"></div>
+        </div>
+        <div class="control">
+          <div class="prev"></div>
+          <div class="play"></div>
+          <div class="next"></div>
+        </div>
+      </div>
     </div>
     <!-- <h1>Hello World!</h1>
     We are using node <script>document.write(process.versions.node)</script>,
@@ -23,6 +88,8 @@
     <!-- <script src="video.js"></script> -->
     <script src="audio.js"></script>
     <script>
+      var progressEl = document.querySelector('.progress-track')
+
       const ffmpeg = require('../node-addons/node-addon-ffmpeg/build/Release/ffmpeg.node')
       let info, videoInitialized = false
       require('electron').ipcRenderer.on('play', function(event, filename) {
