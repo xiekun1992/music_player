@@ -85,7 +85,7 @@
       require('electron').ipcRenderer.on('play', function(event, filename) {
         player.play(filename);
       });
-      player.event.on('progress', () => {
+      player.on('progress', () => {
         progressEl.style.width = player.currentTime / player.duration * 100 + '%'
       })
     </script>
