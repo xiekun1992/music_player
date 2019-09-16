@@ -1,4 +1,4 @@
-const { app, BrowserWindow, globalShortcut, dialog } = require('electron')
+const { app, BrowserWindow, globalShortcut, dialog, ipcMain } = require('electron')
 
 // 保持对window对象的全局引用，如果不这么做的话，当JavaScript对象被
 // 垃圾回收的时候，window对象将会自动的关闭
@@ -8,7 +8,8 @@ function createWindow () {
   // 创建浏览器窗口。
   win = new BrowserWindow({
     width: 800,
-    height: 600,
+    height: 500,
+    frame: false,
     webPreferences: {
       nodeIntegration: true,
       nodeIntegrationInWorker: true,
@@ -61,6 +62,27 @@ app.on('activate', () => {
 app.on('will-quit', () => {
   globalShortcut.unregisterAll()
 })
+
+ipcMain.on('adjust-window', (event, demension) => {
+  win.setSize(+demension.width, +demension.height);
+});
+ipcMain.on('window.maximize', () => {
+  if (win.isMaximized()) {
+    win.unmaximize();
+  } else {
+    win.maximize();
+  }
+});
+ipcMain.on('window.minimize', () => {
+  if (win.isMinimized()) {
+    win.restore();
+  } else {
+    win.minimize();
+  }
+});
+ipcMain.on('window.close', () => {
+  win.close();
+});
 
 function registerGlobalShortcut() {
   const ret = globalShortcut.register('CommandOrControl+N', () => {
