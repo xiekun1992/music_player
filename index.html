@@ -28,6 +28,19 @@
       height: 26px;
       background-color: #29262675;
     }
+    .player-header .title{
+      color: #ddd;
+      width: 50%;
+      display: inline-block;
+      height: 100%;
+      font-size: 14px;
+      line-height: 26px;
+      text-align: center;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      transform: translateX(50%);
+    }
     .player-header .window-operate{
       height: 100%;
       list-style: none;
@@ -125,6 +138,7 @@
   <body>
     <div class="player">
       <div class="player-header">
+        <div id="title" class="title"></div>
         <ul class="window-operate">
           <li id="minimize" class="minimize"><a>-</a></li>
           <li id="maximize" class="maximize"><a>+</a></li>
@@ -154,6 +168,7 @@
       const minimize = document.querySelector('#minimize');
       const maximize = document.querySelector('#maximize');
       const close = document.querySelector('#close');
+      const title = document.querySelector('#title');
 
       minimize.addEventListener('click', () => {
         ipcRenderer.send('window.minimize');
@@ -164,9 +179,11 @@
       close.addEventListener('click', () => {
         ipcRenderer.send('window.close');
       });
+      // title.innerText = '老爹講動畫 遊戲王被歷史掩蓋的經典【黑暗遊戲篇】';
 
       ipcRenderer.on('play', function(event, filename) {
         player.play(filename);
+        title.innerText = filename.split('\\').pop();
         ipcRenderer.send('adjust-window', {width: player.video.width, height: player.video.height});
         console.log(player.video)
       });
