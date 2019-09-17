@@ -138,11 +138,11 @@
   <body>
     <div class="player">
       <div class="player-header">
-        <div id="title" class="title"></div>
+        <div id="titleEl" class="title"></div>
         <ul class="window-operate">
-          <li id="minimize" class="minimize"><a>-</a></li>
-          <li id="maximize" class="maximize"><a>+</a></li>
-          <li id="close" class="close"><a>&times;</a></li>
+          <li id="minimizeEl" class="minimize"><a>-</a></li>
+          <li id="maximizeEl" class="maximize"><a>+</a></li>
+          <li id="closeEl" class="close"><a>&times;</a></li>
         </ul>
       </div>
       <div id="playerContainer"></div>
@@ -152,7 +152,7 @@
         </div>
         <div class="control">
           <div class="prev"></div>
-          <div class="play"></div>
+          <div id="playEl" class="play"></div>
           <div class="next"></div>
         </div>
       </div>
@@ -165,25 +165,35 @@
       } = require('electron');
 
       const progressEl = document.querySelector('.progress-track');
-      const minimize = document.querySelector('#minimize');
-      const maximize = document.querySelector('#maximize');
-      const close = document.querySelector('#close');
-      const title = document.querySelector('#title');
+      let playing = false, paused = false;
 
-      minimize.addEventListener('click', () => {
+      minimizeEl.addEventListener('click', () => {
         ipcRenderer.send('window.minimize');
       });
-      maximize.addEventListener('click', () => {
+      maximizeEl.addEventListener('click', () => {
         ipcRenderer.send('window.maximize');
       });
-      close.addEventListener('click', () => {
+      closeEl.addEventListener('click', () => {
         ipcRenderer.send('window.close');
       });
-      // title.innerText = '老爹講動畫 遊戲王被歷史掩蓋的經典【黑暗遊戲篇】';
+
+      playEl.addEventListener('click', () => {
+        if (!playing) return;
+        if (!paused) {
+          player.pause();
+          paused = true;
+        } else {
+          player.resume();
+          paused = false;
+        }
+      })
 
       ipcRenderer.on('play', function(event, filename) {
+        playing = true;
+        paused = false;
+
         player.play(filename);
-        title.innerText = filename.split('\\').pop();
+        titleEl.innerText = filename.split('\\').pop();
         ipcRenderer.send('adjust-window', {width: player.video.width, height: player.video.height});
         console.log(player.video)
       });
