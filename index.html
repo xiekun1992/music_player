@@ -165,7 +165,7 @@
       } = require('electron');
 
       const progressEl = document.querySelector('.progress-track');
-      let playing = false, paused = false;
+      let playing = false;
 
       minimizeEl.addEventListener('click', () => {
         ipcRenderer.send('window.minimize');
@@ -179,18 +179,15 @@
 
       playEl.addEventListener('click', () => {
         if (!playing) return;
-        if (!paused) {
+        if (!player.paused) {
           player.pause();
-          paused = true;
         } else {
           player.resume();
-          paused = false;
         }
       })
 
       ipcRenderer.on('play', function(event, filename) {
         playing = true;
-        paused = false;
 
         player.play(filename);
         titleEl.innerText = filename.split('\\').pop();
