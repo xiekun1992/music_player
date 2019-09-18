@@ -69,14 +69,14 @@
       margin-top: -1px;
     }
     .player-header .window-operate>li.close {
-      background: #e04439;
+      background: #e0443987;
     }
     .player-header .window-operate>li.close:hover {
       background: rgb(249, 93, 82);
     }
     .player-header .window-operate>li.maximize,
     .player-header .window-operate>li.minimize {
-      background: #292626;
+      background: #29262687;
     }
     .player-header .window-operate>li.maximize:hover,
     .player-header .window-operate>li.minimize:hover {
@@ -178,7 +178,7 @@
       });
 
       playEl.addEventListener('click', () => {
-        if (!playing) return;
+        if (!player.playing) return;
         if (!player.paused) {
           player.pause();
         } else {
@@ -187,8 +187,6 @@
       })
 
       ipcRenderer.on('play', function(event, filename) {
-        playing = true;
-
         player.play(filename);
         titleEl.innerText = filename.split('\\').pop();
         ipcRenderer.send('adjust-window', {width: player.video.width, height: player.video.height});
