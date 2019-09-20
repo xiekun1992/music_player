@@ -100,6 +100,14 @@
     .player .player-control .control {
       text-align: center;
       margin-top: 5px;
+      position: relative;
+    }
+    .player .player-control .control .duration{
+      color: #fff;
+      position: absolute;
+      left: 2%;
+      top: 40%;
+      transform: translateY(-50%);
     }
     .player .player-control .control>.play {
       height: 34px;
@@ -151,6 +159,7 @@
           <div class="progress-track"></div>
         </div>
         <div class="control">
+          <span class="duration" id="durationEl">00:00:00 / 00:00:00</span>
           <div class="prev"></div>
           <div id="playEl" class="play"></div>
           <div class="next"></div>
@@ -193,8 +202,18 @@
         console.log(player.video)
       });
       player.on('progress', () => {
-        progressEl.style.width = player.currentTime / player.duration * 100 + '%'
+        durationEl.innerText = `${timestampFormat(player.currentTime)} / ${timestampFormat(player.duration)}`;
+        progressEl.style.width = `${player.currentTime / player.duration * 100}%`;
       })
+
+
+      function timestampFormat(timestamp) {
+        const seconds = timestamp / 1000;// 转成秒
+        const min = `${Math.floor(seconds % 3600 / 60)}`;
+        const hour = `${Math.floor(seconds / 3600)}`;
+        const sec = `${Math.floor(seconds % 3600 % 60)}`;
+        return `${hour.padStart(2, 0)}:${min.padStart(2, 0)}:${sec.padStart(2, 0)}`;
+      }
     </script>
   </body>
 </html>
