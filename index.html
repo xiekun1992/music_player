@@ -61,7 +61,9 @@
           player.resume();
         }
       });
+      
       // 音量控制
+      volumeEl.value = window.localStorage.getItem('volume') || volumeEl.max;
       setVolume();
       volumeEl.addEventListener('input', () => {
         setVolume();
@@ -70,6 +72,7 @@
         volumeProgressEl.style.width = `${volumeEl.value / volumeEl.max * 100}%`;
         volumeProgressSlideEl.style.left = `calc(${volumeEl.value / volumeEl.max * 100}% - ${volumeEl.value / volumeEl.max * 14}px)`;
         player.volume = volumeEl.value;
+        window.localStorage.setItem('volume', volumeEl.value);
       }
 
       ipcRenderer.on('play', function(event, filename) {
