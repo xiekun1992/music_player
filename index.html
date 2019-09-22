@@ -71,7 +71,7 @@
       function setVolume() {
         volumeProgressEl.style.width = `${volumeEl.value / volumeEl.max * 100}%`;
         volumeProgressSlideEl.style.left = `calc(${volumeEl.value / volumeEl.max * 100}% - ${volumeEl.value / volumeEl.max * 14}px)`;
-        player.volume = volumeEl.value;
+        player.volume = +volumeEl.value;
         window.localStorage.setItem('volume', volumeEl.value);
       }
 
@@ -81,6 +81,9 @@
         ipcRenderer.send('adjust-window', {width: player.video.width, height: player.video.height});
         console.log(player.video)
       });
+      player.on('play', () => {
+        player.volume = +volumeEl.value;
+      })
       player.on('progress', () => {
         durationEl.innerText = `${timestampFormat(player.currentTime)} / ${timestampFormat(player.duration)}`;
         progressEl.style.width = `${player.currentTime / player.duration * 100}%`;
