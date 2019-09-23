@@ -83,18 +83,24 @@ ipcMain.on('window.minimize', () => {
 ipcMain.on('window.close', () => {
   win.close();
 });
+ipcMain.on('play-open', () => {
+  openFile();
+});
 
+function openFile() {
+  dialog.showOpenDialog({
+    title: '选择视频',
+    properties: ['openFile']
+  }, (filePaths) => {
+    if (filePaths) {
+      win.webContents.send('play', filePaths[0])
+    }
+    console.log(filePaths)
+  })
+}
 function registerGlobalShortcut() {
   const ret = globalShortcut.register('CommandOrControl+N', () => {
-    dialog.showOpenDialog({
-      title: '选择视频',
-      properties: ['openFile']
-    }, (filePaths) => {
-      if (filePaths) {
-        win.webContents.send('play', filePaths[0])
-      }
-      console.log(filePaths)
-    })
+    openFile();
   });
   if (!ret) {
     console.log('register ctrl+N fail')

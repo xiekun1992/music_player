@@ -8,6 +8,24 @@ canvas { width: 100%; height: 100%; float: left; }
   height: 100%;
   background: #000;
 }
+.player .player-open {
+  -webkit-app-region: no-drag;
+  position: absolute;
+  z-index: 10;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.player .player-open a{
+  color: #ccc;
+  text-decoration: none;
+  padding: 5px 25px 7px 25px;
+  background: #29262675;
+}
+.player .player-open a:hover{
+  color: #fff;
+  background: #292626cc;
+}
 .player:hover .player-header {
   opacity: 1;
 }
@@ -87,7 +105,7 @@ canvas { width: 100%; height: 100%; float: left; }
   /* background: #00000085; */
   left: 0;
   bottom: 0;
-  /* opacity: 0; */
+  opacity: 0;
   z-index: 99999999;
   transition: opacity 0.5s;
 }

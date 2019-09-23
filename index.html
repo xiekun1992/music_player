@@ -7,6 +7,7 @@
   </head>
   <body>
     <div class="player">
+      <div class="player-open"><a id="openEl" href="javascript:void(0)">打开文件</a></div>
       <div class="player-header">
         <div id="titleEl" class="title"></div>
         <ul class="window-operate">
@@ -41,8 +42,10 @@
       } = require('electron');
 
       const progressEl = document.querySelector('.progress-track');
-      let playing = false;
-
+      
+      openEl.addEventListener('click', () => {
+        ipcRenderer.send('play-open');
+      });
       minimizeEl.addEventListener('click', () => {
         ipcRenderer.send('window.minimize');
       });
@@ -76,6 +79,8 @@
       }
 
       ipcRenderer.on('play', function(event, filename) {
+        openEl.style.display = 'none';
+
         player.play(filename);
         titleEl.innerText = filename.split('\\').pop();
         ipcRenderer.send('adjust-window', {width: player.video.width, height: player.video.height});
@@ -83,10 +88,13 @@
       });
       player.on('play', () => {
         player.volume = +volumeEl.value;
-      })
+      });
       player.on('progress', () => {
         durationEl.innerText = `${timestampFormat(player.currentTime)} / ${timestampFormat(player.duration)}`;
         progressEl.style.width = `${player.currentTime / player.duration * 100}%`;
+      });
+      player.on('ended', () => {
+        openEl.style.display = 'block';
       })
 
 
