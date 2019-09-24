@@ -94,7 +94,9 @@
         progressEl.style.width = `${player.currentTime / player.duration * 100}%`;
       });
       player.on('ended', () => {
-        openEl.style.display = 'block';
+        openEl.style.display = 'block'; // 显示打开文件
+        progressEl.style.width = 0; // 重置视频进度
+        durationEl.innerText = '00:00:00 / 00:00:00'; // 重置视频时间
       })
 
 
