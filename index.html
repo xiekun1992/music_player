@@ -19,7 +19,9 @@
       <div id="playerContainer"></div>
       <div class="player-control">
         <div class="progress">
-          <div class="progress-track"></div>
+          <div id="progressSlideEl" class="progress-track-slide"></div>
+          <div id="progressEl" class="progress-track"></div>
+          <input type="range" id="trackEl" min="0" max="1" step="0.0001"/>
         </div>
         <div class="control">
           <span class="duration" id="durationEl">00:00:00 / 00:00:00</span>
@@ -40,8 +42,6 @@
       const {
         ipcRenderer
       } = require('electron');
-
-      const progressEl = document.querySelector('.progress-track');
       
       openEl.addEventListener('click', () => {
         ipcRenderer.send('play-open');
@@ -64,7 +64,13 @@
           player.resume();
         }
       });
-      
+      // 播放进度控制
+      // trackEl.addEventListener('change', () => {
+      //   volumeProgressEl.style.width = `${volumeEl.value / volumeEl.max * 100}%`;
+      //   volumeProgressSlideEl.style.left = `calc(${volumeEl.value / volumeEl.max * 100}% - ${volumeEl.value / volumeEl.max * 14}px)`;
+      //   player.volume = +trackEl.value;
+      // });
+
       // 音量控制
       volumeEl.value = window.localStorage.getItem('volume') || volumeEl.max;
       setVolume();
@@ -91,11 +97,18 @@
       });
       player.on('progress', () => {
         durationEl.innerText = `${timestampFormat(player.currentTime)} / ${timestampFormat(player.duration)}`;
+
         progressEl.style.width = `${player.currentTime / player.duration * 100}%`;
+        trackEl.value = player.currentTime / player.duration;
+        progressSlideEl.style.left = `calc(${trackEl.value / trackEl.max * 100}% - ${trackEl.value / trackEl.max * 14}px)`;
       });
       player.on('ended', () => {
         openEl.style.display = 'block'; // 显示打开文件
+        
+        trackEl.value = 0; // 重置视频进度
         progressEl.style.width = 0; // 重置视频进度
+        progressSlideEl.style.left = `calc(${trackEl.value / trackEl.max * 100}% - ${trackEl.value / trackEl.max * 14}px)`;
+
         durationEl.innerText = '00:00:00 / 00:00:00'; // 重置视频时间
       })
 
