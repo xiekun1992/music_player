@@ -67,12 +67,14 @@
       });
       // 播放进度控制
       trackEl.addEventListener('input', () => {
+        if (!player.playing) return;
         progressDragging = true;
         progressEl.style.width = `${trackEl.value / trackEl.max * 100}%`;
         progressSlideEl.style.left = `calc(${trackEl.value / trackEl.max * 100}% - ${trackEl.value / trackEl.max * 14}px)`;
         // player.volume = +trackEl.value;
       });
       trackEl.addEventListener('change', () => {
+        if (!player.playing) return;
         // player.pause();
         // console.log('trackEl change', trackEl.value, trackEl.value / trackEl.max * player.duration)
         player.seek(trackEl.value / trackEl.max * player.duration);
