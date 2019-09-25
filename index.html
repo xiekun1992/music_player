@@ -21,7 +21,7 @@
         <div class="progress">
           <div id="progressSlideEl" class="progress-track-slide"></div>
           <div id="progressEl" class="progress-track"></div>
-          <input type="range" id="trackEl" min="0" max="1" step="0.0001"/>
+          <input type="range" id="trackEl" min="0" max="1" step="0.0001" value="0"/>
         </div>
         <div class="control">
           <span class="duration" id="durationEl">00:00:00 / 00:00:00</span>
@@ -42,6 +42,7 @@
       const {
         ipcRenderer
       } = require('electron');
+      let progressDragging = false;
       
       openEl.addEventListener('click', () => {
         ipcRenderer.send('play-open');
@@ -65,11 +66,21 @@
         }
       });
       // 播放进度控制
-      // trackEl.addEventListener('change', () => {
-      //   volumeProgressEl.style.width = `${volumeEl.value / volumeEl.max * 100}%`;
-      //   volumeProgressSlideEl.style.left = `calc(${volumeEl.value / volumeEl.max * 100}% - ${volumeEl.value / volumeEl.max * 14}px)`;
-      //   player.volume = +trackEl.value;
-      // });
+      trackEl.addEventListener('input', () => {
+        progressDragging = true;
+        progressEl.style.width = `${trackEl.value / trackEl.max * 100}%`;
+        progressSlideEl.style.left = `calc(${trackEl.value / trackEl.max * 100}% - ${trackEl.value / trackEl.max * 14}px)`;
+        // player.volume = +trackEl.value;
+      });
+      trackEl.addEventListener('change', () => {
+        // player.pause();
+        // console.log('trackEl change', trackEl.value, trackEl.value / trackEl.max * player.duration)
+        player.seek(trackEl.value / trackEl.max * player.duration);
+        progressEl.style.width = `${trackEl.value / trackEl.max * 100}%`;
+        progressSlideEl.style.left = `calc(${trackEl.value / trackEl.max * 100}% - ${trackEl.value / trackEl.max * 14}px)`;
+        // player.resume();
+        progressDragging = false;
+      });
 
       // 音量控制
       volumeEl.value = window.localStorage.getItem('volume') || volumeEl.max;
@@ -97,10 +108,11 @@
       });
       player.on('progress', () => {
         durationEl.innerText = `${timestampFormat(player.currentTime)} / ${timestampFormat(player.duration)}`;
-
-        progressEl.style.width = `${player.currentTime / player.duration * 100}%`;
-        trackEl.value = player.currentTime / player.duration;
-        progressSlideEl.style.left = `calc(${trackEl.value / trackEl.max * 100}% - ${trackEl.value / trackEl.max * 14}px)`;
+        if (!progressDragging) {
+          progressEl.style.width = `${player.currentTime / player.duration * 100}%`;
+          trackEl.value = player.currentTime / player.duration;
+          progressSlideEl.style.left = `calc(${trackEl.value / trackEl.max * 100}% - ${trackEl.value / trackEl.max * 14}px)`;
+        }
       });
       player.on('ended', () => {
         openEl.style.display = 'block'; // 显示打开文件
