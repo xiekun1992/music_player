@@ -117,6 +117,8 @@
         }
       });
       player.on('ended', () => {
+        titleEl.innerText = '';
+
         openEl.style.display = 'block'; // 显示打开文件
         
         trackEl.value = 0; // 重置视频进度
