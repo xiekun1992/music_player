@@ -23,3 +23,15 @@ window.addEventListener('mousemove', e => {
 window.addEventListener('mouseup', e => {
   dragging = false;
 });
+
+playerEl.addEventListener('dblclick', e => {
+  try {
+    if (remote.BrowserWindow.getFocusedWindow().isFullScreen()) {
+      remote.BrowserWindow.getFocusedWindow().setFullScreen(false);
+    } else {
+      remote.BrowserWindow.getFocusedWindow().setFullScreen(true);
+    }
+  } catch(e) {
+    console.error(e);
+  }
+});
