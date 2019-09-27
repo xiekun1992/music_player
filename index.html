@@ -6,7 +6,7 @@
     <link href="./style.css" rel="stylesheet">
   </head>
   <body>
-    <div class="player">
+    <div class="player" id="playerEl">
       <div class="player-open"><a id="openEl" href="javascript:void(0)">打开文件</a></div>
       <div class="player-header">
         <div id="titleEl" class="title"></div>
@@ -37,6 +37,7 @@
       </div>
     </div>
     <script src="three.js"></script>
+    <script src="utils.js"></script>
     <script>
       const player = require('../node-addons/node-addon-ffmpeg')
       const {
