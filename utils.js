@@ -4,15 +4,17 @@ const {
 
 let wX, wY, dragging = false;
 
-playerEl.addEventListener('mousedown', e => {
-  dragging = true;
-  wX = e.pageX;
-  wY = e.pageY;
+playerContainer.addEventListener('mousedown', e => {
+  // if (e.target == playerContainer) {
+    dragging = true;
+    wX = e.pageX;
+    wY = e.pageY;
+  // }
 });
 window.addEventListener('mousemove', e => {
-  e.stopPropagation();
-  e.preventDefault();
   if (dragging) {
+    e.stopPropagation();
+    e.preventDefault();
     try {
       remote.BrowserWindow.getFocusedWindow().setPosition(e.screenX - wX, e.screenY - wY);
     } catch(e) {
@@ -24,7 +26,7 @@ window.addEventListener('mouseup', e => {
   dragging = false;
 });
 
-playerEl.addEventListener('dblclick', e => {
+playerContainer.addEventListener('dblclick', e => {
   try {
     if (remote.BrowserWindow.getFocusedWindow().isFullScreen()) {
       remote.BrowserWindow.getFocusedWindow().setFullScreen(false);
