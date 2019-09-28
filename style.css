@@ -121,8 +121,9 @@ canvas { width: 100%; height: 100%; float: left; }
 .player .player-control .control .duration{
   color: #fff;
   position: absolute;
-  left: 2%;
+  left: 10px;
   top: 40%;
+  font-size: 14px;
   transform: translateY(-50%);
 }
 .player .player-control .control>.play {
@@ -147,8 +148,8 @@ canvas { width: 100%; height: 100%; float: left; }
   height: 5px;
   background: #8684848a;
   position: relative;
-  width: 96%;
-  transform: translateX(2%);
+  width: calc(100% - 20px);
+  transform: translateX(10px);
 }
 .player .player-control .progress input[type=range]{
   /* -webkit-app-region: no-drag; */
@@ -182,7 +183,7 @@ canvas { width: 100%; height: 100%; float: left; }
 }
 .player .player-control .control .volume{
   position: absolute;
-  left: calc(2% + 184px);
+  left: 194px;
   top: 40%;
   transform: translateY(-50%);
   height: 4px;
@@ -218,7 +219,7 @@ canvas { width: 100%; height: 100%; float: left; }
 }
 .player .player-control .fullscreen {
   position: absolute;
-  right: 2%;
+  right: 10px;
   top: 40%;
   transform: translateY(-50%);
 }
