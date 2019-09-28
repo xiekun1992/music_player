@@ -182,7 +182,7 @@ canvas { width: 100%; height: 100%; float: left; }
 }
 .player .player-control .control .volume{
   position: absolute;
-  right: 2%;
+  left: calc(2% + 184px);
   top: 40%;
   transform: translateY(-50%);
   height: 4px;
@@ -215,4 +215,18 @@ canvas { width: 100%; height: 100%; float: left; }
   left: 0;
   opacity: 0;
   width: 100%;
+}
+.player .player-control .fullscreen {
+  position: absolute;
+  right: 2%;
+  top: 40%;
+  transform: translateY(-50%);
+}
+.player .player-control .fullscreen>a {
+  font-size: 20px;
+  color: #9e9e9ebf;
+  transition: color 0.3s;
+}
+.player .player-control .fullscreen>a:hover {
+  color: #b7b7b7;
 }
