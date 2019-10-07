@@ -26,7 +26,7 @@ window.addEventListener('mouseup', e => {
   dragging = false;
 });
 // 全屏控制
-playerContainer.addEventListener('dblclick', e => {
+window.addEventListener('dblclick', e => {
   try {
     setFullscreen();
   } catch(e) {
