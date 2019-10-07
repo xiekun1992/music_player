@@ -28,11 +28,12 @@ window.addEventListener('mouseup', e => {
 
 playerContainer.addEventListener('dblclick', e => {
   try {
-    if (remote.BrowserWindow.getFocusedWindow().isFullScreen()) {
-      remote.BrowserWindow.getFocusedWindow().setFullScreen(false);
-    } else {
-      remote.BrowserWindow.getFocusedWindow().setFullScreen(true);
-    }
+    // if (remote.BrowserWindow.getFocusedWindow().isFullScreen()) {
+    //   remote.BrowserWindow.getFocusedWindow().setFullScreen(false);
+    // } else {
+    //   remote.BrowserWindow.getFocusedWindow().setFullScreen(true);
+    // }
+    setFullscreen();
   } catch(e) {
     console.error(e);
   }

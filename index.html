@@ -102,7 +102,7 @@
         window.localStorage.setItem('volume', volumeEl.value);
       }
 
-      fullscreenEl.addEventListener('click', () => {
+      function setFullscreen() {
         if (remote.BrowserWindow.getFocusedWindow().isFullScreen()) {
           remote.BrowserWindow.getFocusedWindow().setFullScreen(false);
           fullscreenEl.classList.remove('icon-shrink');
@@ -112,6 +112,9 @@
           fullscreenEl.classList.remove('icon-enlarge');
           fullscreenEl.classList.add('icon-shrink');
         }
+      }
+      fullscreenEl.addEventListener('click', () => {
+        setFullscreen();
       });
 
       ipcRenderer.on('play', function(event, filename) {
