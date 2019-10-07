@@ -3,7 +3,7 @@ const {
 } = require('electron');
 
 let wX, wY, dragging = false;
-
+// 窗口移动控制
 playerContainer.addEventListener('mousedown', e => {
   // if (e.target == playerContainer) {
     dragging = true;
@@ -25,16 +25,46 @@ window.addEventListener('mousemove', e => {
 window.addEventListener('mouseup', e => {
   dragging = false;
 });
-
+// 全屏控制
 playerContainer.addEventListener('dblclick', e => {
   try {
-    // if (remote.BrowserWindow.getFocusedWindow().isFullScreen()) {
-    //   remote.BrowserWindow.getFocusedWindow().setFullScreen(false);
-    // } else {
-    //   remote.BrowserWindow.getFocusedWindow().setFullScreen(true);
-    // }
     setFullscreen();
   } catch(e) {
     console.error(e);
   }
+});
+// 控制UI的显隐
+let cursorHideTimer, canHideCursor = false;
+function hideCursor() {
+  clearTimeout(cursorHideTimer);
+  document.body.classList.remove('hide-cursor');
+  if (canHideCursor && remote.BrowserWindow.getFocusedWindow().isFullScreen()) {
+    cursorHideTimer = setTimeout(function() {
+      clearTimeout(cursorHideTimer);
+      document.body.classList.add('hide-cursor');
+    }, 1000);
+  }
+}
+playerControl.addEventListener('mouseenter', () => {
+  playerEl.classList.remove('hide-control');
+  canHideCursor = false;
+  hideCursor();
+});
+playerControl.addEventListener('mouseleave', () => {
+  playerEl.classList.add('hide-control');
+  canHideCursor = true;
+  hideCursor();
+});
+playerHeader.addEventListener('mouseenter', () => {
+  playerEl.classList.remove('hide-control');
+  canHideCursor = false;
+  hideCursor();
+});
+playerHeader.addEventListener('mouseleave', () => {
+  playerEl.classList.add('hide-control');
+  canHideCursor = true;
+  hideCursor();
+});
+document.body.addEventListener('mousemove', () => {
+  hideCursor();
 });

@@ -1,6 +1,9 @@
 * {user-select: none;}
 body { margin: 0; }
 canvas { width: 100%; height: 100%; float: left; }
+.hide-cursor {
+  cursor: none !important;
+}
 .player {
   /* -webkit-app-region: drag; */
   position: fixed;
@@ -29,12 +32,15 @@ canvas { width: 100%; height: 100%; float: left; }
   color: #fff;
   background: #292626cc;
 }
-.player:hover .player-header {
-  opacity: 1;
+/* .player:hover .player-header {
+  opacity: 1 !important;
+} */
+.player.hide-control .player-header {
+  opacity: 0;
 }
 .player-header {
   transition: opacity 0.5s;
-  opacity: 0;
+  opacity: 1;
   /* -webkit-app-region: no-drag; */
   position: fixed;
   top: 0;
@@ -97,8 +103,11 @@ canvas { width: 100%; height: 100%; float: left; }
 .player-header .window-operate>li.minimize:hover {
   background: rgb(66, 63, 63);
 }
-.player:hover .player-control {
-  opacity: 1;
+/* .player:hover .player-control {
+  opacity: 1 !important;
+} */
+.player.hide-control .player-control {
+  opacity: 0;
 }
 .player .player-control{
   /* -webkit-app-region: no-drag; */
@@ -109,7 +118,7 @@ canvas { width: 100%; height: 100%; float: left; }
   background-color: #29262675;
   left: 0;
   bottom: 0;
-  /* opacity: 0; */
+  opacity: 1;
   z-index: 99999999;
   transition: opacity 0.5s;
 }

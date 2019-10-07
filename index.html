@@ -9,7 +9,7 @@
   <body>
     <div class="player" id="playerEl">
       <div class="player-open"><a id="openEl" href="javascript:void(0)">打开文件</a></div>
-      <div class="player-header">
+      <div class="player-header" id="playerHeader">
         <div id="titleEl" class="title"></div>
         <ul class="window-operate">
           <li id="minimizeEl" class="minimize"><a>-</a></li>
@@ -18,7 +18,7 @@
         </ul>
       </div>
       <div id="playerContainer"></div>
-      <div class="player-control">
+      <div class="player-control" id="playerControl">
         <div class="progress">
           <div id="progressSlideEl" class="progress-track-slide"></div>
           <div id="progressEl" class="progress-track"></div>
@@ -48,7 +48,7 @@
         ipcRenderer
       } = require('electron');
       let progressDragging = false;
-      
+      // 头部控制
       openEl.addEventListener('click', () => {
         ipcRenderer.send('play-open');
       });
@@ -61,7 +61,7 @@
       closeEl.addEventListener('click', () => {
         ipcRenderer.send('window.close');
       });
-
+      // 播放控制
       playEl.addEventListener('click', () => {
         if (!player.playing) return;
         if (!player.paused) {
@@ -112,11 +112,13 @@
           fullscreenEl.classList.remove('icon-enlarge');
           fullscreenEl.classList.add('icon-shrink');
         }
+        hideCursor();
       }
       fullscreenEl.addEventListener('click', () => {
         setFullscreen();
       });
 
+      // 下层播放控制
       ipcRenderer.on('play', function(event, filename) {
         openEl.style.display = 'none';
 
