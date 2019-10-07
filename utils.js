@@ -38,11 +38,15 @@ let cursorHideTimer, canHideCursor = false;
 function hideCursor() {
   clearTimeout(cursorHideTimer);
   document.body.classList.remove('hide-cursor');
-  if (canHideCursor && remote.BrowserWindow.getFocusedWindow().isFullScreen()) {
-    cursorHideTimer = setTimeout(function() {
-      clearTimeout(cursorHideTimer);
-      document.body.classList.add('hide-cursor');
-    }, 1000);
+  try {
+    if (canHideCursor && remote.BrowserWindow.getFocusedWindow().isFullScreen()) {
+      cursorHideTimer = setTimeout(function() {
+        clearTimeout(cursorHideTimer);
+        document.body.classList.add('hide-cursor');
+      }, 1000);
+    }
+  } catch(e) {
+    
   }
 }
 playerControl.addEventListener('mouseenter', () => {
