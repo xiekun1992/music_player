@@ -22,7 +22,7 @@
         <div class="progress">
           <div id="progressSlideEl" class="progress-track-slide"></div>
           <div id="progressEl" class="progress-track"></div>
-          <input type="range" id="trackEl" min="0" max="1" step="0.0001" value="0"/>
+          <input type="range" id="trackEl" min="0" max="10000" step="1" value="0"/>
         </div>
         <div class="control">
           <span class="duration" id="durationEl">00:00:00 / 00:00:00</span>
@@ -32,7 +32,7 @@
           <div class="volume">
             <div id="volumeProgressSlideEl" class="volume-progress-slide"></div>
             <div id="volumeProgressEl" class="volume-progress"></div>
-            <input type="range" id="volumeEl" min="0" max="1" step="0.01"/>
+            <input type="range" id="volumeEl" min="0" max="100" step="1"/>
           </div>
           <div class="fullscreen">
             <a id="fullscreenEl" class="icon-enlarge"></a>
@@ -88,6 +88,21 @@
         // player.resume();
         progressDragging = false;
       });
+      window.addEventListener('keydown', e => {
+        if (!player.playing) return;
+        if (e.keyCode == 37) { // 左方向
+          // trackEl.value -= 5;
+          player.seek(trackEl.value / trackEl.max * player.duration - 5000);
+          progressEl.style.width = `${trackEl.value / trackEl.max * 100}%`;
+          progressSlideEl.style.left = `calc(${trackEl.value / trackEl.max * 100}% - ${trackEl.value / trackEl.max * 14}px)`;
+        } else if (e.keyCode == 39) { // 右方向
+          // trackEl.value += 5;
+          player.seek(trackEl.value / trackEl.max * player.duration + 5000);
+          progressEl.style.width = `${trackEl.value / trackEl.max * 100}%`;
+          progressSlideEl.style.left = `calc(${trackEl.value / trackEl.max * 100}% - ${trackEl.value / trackEl.max * 14}px)`;
+        }
+        console.log(trackEl.value)
+      });
 
       // 音量控制
       volumeEl.value = window.localStorage.getItem('volume') || volumeEl.max;
@@ -134,7 +149,7 @@
         durationEl.innerText = `${timestampFormat(player.currentTime)} / ${timestampFormat(player.duration)}`;
         if (!progressDragging) {
           progressEl.style.width = `${player.currentTime / player.duration * 100}%`;
-          trackEl.value = player.currentTime / player.duration;
+          trackEl.value = player.currentTime / player.duration * trackEl.max;
           progressSlideEl.style.left = `calc(${trackEl.value / trackEl.max * 100}% - ${trackEl.value / trackEl.max * 14}px)`;
         }
       });
