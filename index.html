@@ -22,7 +22,8 @@
         <div class="progress">
           <div id="progressSlideEl" class="progress-track-slide"></div>
           <div id="progressEl" class="progress-track"></div>
-          <input type="range" id="trackEl" min="0" max="10000" step="1" value="0"/>
+          <div id="trackEl" class="progress-event-bar"></div>
+          <!-- <input type="range" id="trackEl" min="0" max="10000" step="1" value="0"/> -->
         </div>
         <div class="control">
           <span class="duration" id="durationEl">00:00:00 / 00:00:00</span>
@@ -47,7 +48,6 @@
       const {
         ipcRenderer
       } = require('electron');
-      let progressDragging = false;
       // 头部控制
       openEl.addEventListener('click', () => {
         ipcRenderer.send('play-open');
@@ -71,37 +71,46 @@
         }
       });
       // 播放进度控制
-      trackEl.addEventListener('input', () => {
+      let progressDown = false;
+      // trackEl.addEventListener('mouseup', (e) => {
+      //   if (!player.playing) return;
+      //   const percent = e.offsetX / trackEl.clientWidth;
+      //   progressEl.style.width = `${percent * 100}%`;
+      //   progressSlideEl.style.left = `calc(${percent * 100}% - ${percent * 14}px)`;
+      //   player.seek(player.duration * percent);
+      // });
+      progressSlideEl.addEventListener('mousedown', (e) => {
         if (!player.playing) return;
-        progressDragging = true;
-        progressEl.style.width = `${trackEl.value / trackEl.max * 100}%`;
-        progressSlideEl.style.left = `calc(${trackEl.value / trackEl.max * 100}% - ${trackEl.value / trackEl.max * 14}px)`;
-        // player.volume = +trackEl.value;
+        progressDown = true;
+        trackEl.style.zIndex = 111;
       });
-      trackEl.addEventListener('change', () => {
+      window.addEventListener('mousemove', (e) => {
         if (!player.playing) return;
-        // player.pause();
-        // console.log('trackEl change', trackEl.value, trackEl.value / trackEl.max * player.duration)
-        player.seek(trackEl.value / trackEl.max * player.duration);
-        progressEl.style.width = `${trackEl.value / trackEl.max * 100}%`;
-        progressSlideEl.style.left = `calc(${trackEl.value / trackEl.max * 100}% - ${trackEl.value / trackEl.max * 14}px)`;
-        // player.resume();
-        progressDragging = false;
+        if (progressDown) {
+          const percent = e.offsetX / trackEl.clientWidth;
+          progressEl.style.width = `${percent * 100}%`;
+          progressSlideEl.style.left = `calc(${percent * 100}% - ${percent * 14}px)`;
+        }
       });
-      window.addEventListener('keydown', e => {
+      trackEl.addEventListener('mouseup', seek, true);
+      window.addEventListener('mouseup', seek);
+      function seek(e) {
+        if (!player.playing) return;
+        const percent = e.offsetX / trackEl.clientWidth;
+        progressEl.style.width = `${percent * 100}%`;
+        progressSlideEl.style.left = `calc(${percent * 100}% - ${percent * 14}px)`;
+        player.seek(player.duration * percent);
+        trackEl.style.zIndex = 1;
+        progressDown = false;
+      }
+      window.addEventListener('keyup', e => {
+        console.error('keyup==========')
         if (!player.playing) return;
         if (e.keyCode == 37) { // 左方向
-          // trackEl.value -= 5;
-          player.seek(trackEl.value / trackEl.max * player.duration - 5000);
-          progressEl.style.width = `${trackEl.value / trackEl.max * 100}%`;
-          progressSlideEl.style.left = `calc(${trackEl.value / trackEl.max * 100}% - ${trackEl.value / trackEl.max * 14}px)`;
+          player.seek(player.currentTime - 5000);
         } else if (e.keyCode == 39) { // 右方向
-          // trackEl.value += 5;
-          player.seek(trackEl.value / trackEl.max * player.duration + 5000);
-          progressEl.style.width = `${trackEl.value / trackEl.max * 100}%`;
-          progressSlideEl.style.left = `calc(${trackEl.value / trackEl.max * 100}% - ${trackEl.value / trackEl.max * 14}px)`;
+          player.seek(player.currentTime + 5000);
         }
-        console.log(trackEl.value)
       });
 
       // 音量控制
@@ -147,24 +156,19 @@
       });
       player.on('progress', () => {
         durationEl.innerText = `${timestampFormat(player.currentTime)} / ${timestampFormat(player.duration)}`;
-        if (!progressDragging) {
-          progressEl.style.width = `${player.currentTime / player.duration * 100}%`;
-          trackEl.value = player.currentTime / player.duration * trackEl.max;
-          progressSlideEl.style.left = `calc(${trackEl.value / trackEl.max * 100}% - ${trackEl.value / trackEl.max * 14}px)`;
+        if (!progressDown) {
+          const percent = player.currentTime / player.duration;
+          progressEl.style.width = `${percent * 100}%`;
+          progressSlideEl.style.left = `calc(${percent * 100}% - ${percent * 14}px)`;
         }
       });
       player.on('ended', () => {
         titleEl.innerText = '';
-
         openEl.style.display = 'block'; // 显示打开文件
-        
-        trackEl.value = 0; // 重置视频进度
         progressEl.style.width = 0; // 重置视频进度
-        progressSlideEl.style.left = `calc(${trackEl.value / trackEl.max * 100}% - ${trackEl.value / trackEl.max * 14}px)`;
-
+        progressSlideEl.style.left = 0;
         durationEl.innerText = '00:00:00 / 00:00:00'; // 重置视频时间
       })
-
 
       function timestampFormat(timestamp) {
         const seconds = timestamp / 1000;// 转成秒

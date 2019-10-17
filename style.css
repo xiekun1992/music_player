@@ -190,6 +190,12 @@ canvas { width: 100%; height: 100%; float: left; }
   background: #fff;
   /* background: #2196F3; */
 }
+.player .player-control .progress>.progress-event-bar{
+  position: absolute;
+  width: 100%;
+  height: 14px;
+  top: -5px;
+}
 .player .player-control .control .volume{
   position: absolute;
   left: 194px;
