@@ -96,12 +96,14 @@
       window.addEventListener('mouseup', seek);
       function seek(e) {
         if (!player.playing) return;
-        const percent = e.offsetX / trackEl.clientWidth;
-        progressEl.style.width = `${percent * 100}%`;
-        progressSlideEl.style.left = `calc(${percent * 100}% - ${percent * 14}px)`;
-        player.seek(player.duration * percent);
-        trackEl.style.zIndex = 1;
-        progressDown = false;
+        if (progressDown) {
+          const percent = e.offsetX / trackEl.clientWidth;
+          progressEl.style.width = `${percent * 100}%`;
+          progressSlideEl.style.left = `calc(${percent * 100}% - ${percent * 14}px)`;
+          player.seek(player.duration * percent);
+          trackEl.style.zIndex = 1;
+          progressDown = false;
+        }
       }
       window.addEventListener('keyup', e => {
         console.error('keyup==========')
